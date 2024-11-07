@@ -110,7 +110,7 @@ def get_response():
             bot_response = 'Sorry, the response from the server was not in JSON format.'
 
         bot_response_hyperlinked = add_hyperlink(bot_response['output'])
-        knowledge_graph = bot_response['extra']
+        additional_data = bot_response['extra']
         bot_response_formatted = format_response(bot_response_hyperlinked)  # Format response to replace newlines with <br>
         payload['input']['chat_history'].append([user_message, bot_response_formatted])
         print(payload)
@@ -123,9 +123,7 @@ def get_response():
 
     return jsonify({
         'response': bot_response_formatted,
-        'extra': {
-            'knowledge_graph': knowledge_graph
-        }
+        'meta': additional_data
     })
 
 @app.route('/export_chat_history')
