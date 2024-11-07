@@ -109,9 +109,10 @@ def get_response():
             logging.error(f"Unexpected content type: {response.headers.get('Content-Type')}")
             bot_response = 'Sorry, the response from the server was not in JSON format.'
 
-        bot_response = add_hyperlink(bot_response)
-        bot_response = format_response(bot_response)  # Format response to replace newlines with <br>
-        payload['input']['chat_history'].append([user_message, bot_response])
+        bot_response_hyperlinked = add_hyperlink(bot_response['output'])
+        knowledge_graph = bot_response['extra']
+        bot_response_formatted = format_response(bot_response_hyperlinked)  # Format response to replace newlines with <br>
+        payload['input']['chat_history'].append([user_message, bot_response_formatted])
         print(payload)
     except requests.exceptions.HTTPError as http_err:
         logging.error(f"HTTP error occurred: {http_err}")
@@ -120,7 +121,12 @@ def get_response():
         logging.error(f"Other error occurred: {err}")
         bot_response = 'Sorry, there was an error processing your request.'
 
-    return jsonify({'response': bot_response})
+    return jsonify({
+        'response': bot_response_formatted,
+        'extra': {
+            'knowledge_graph': knowledge_graph
+        }
+    })
 
 @app.route('/export_chat_history')
 def export_chat_history():
