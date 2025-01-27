@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- <div id="graph-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div> -->
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>DUG LLM Chatbot</title>
@@ -14,7 +18,7 @@
             flex-direction: row;
             align-items: stretch;
         }
-        
+
         .contact-us {
             display: flex;
             flex-direction: row;
@@ -125,6 +129,55 @@
                 max-width: 100%;
             }
         }
+
+        .tooltip {
+            position: absolute;
+            visibility: hidden;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .chat-response-container {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .response-container {
+            flex: 1;
+            /* Takes 50% width */
+            overflow-wrap: break-word;
+            /* Ensure long texts wrap correctly */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .graph-container {
+            flex: 1;
+            /* Takes 50% width */
+            position: relative;
+            display: block;
+            width: 100%;
+            /* Expand to full width initially */
+            height: auto;
+            /* Allow height to adjust dynamically */
+            overflow: visible;
+            /* Ensure no content is clipped */
+            border: 1px solid #ddd;
+            /* Optional for visual feedback */
+            background-color: #f9f9f9;
+            /* Optional for aesthetics */
+            transition: width 0.2s ease, height 0.2s ease;
+            /* Smooth resizing */
+        }
     </style>
 </head>
 
@@ -132,7 +185,7 @@
     <button id="toggle-mode-btn" class="toggle-button"><i class="fas fa-sun"></i></button>
 
     <div class="banner-container">
-         <img src="{{ banner_image_url }}" alt="Banner" class="banner">
+        <img src="{{ banner_image_url }}" alt="Banner" class="banner">
     </div>
     <br />
     <div class="button-container">
@@ -146,11 +199,13 @@
     <div class="chat-container">
         <div class="chat-box" id="chat-box">
             <div class="chat-message bot-message">Hello! What can I help you find today?</div>
+
         </div>
         <div class="chat-input-container">
             <!-- Text area input -->
-            <textarea id="user-input" placeholder="Ask your question here (e.g. 'find COPD studies', 'who is studying cocaine addiction?', etc.)"
-                      rows="1" autofocus></textarea>
+            <textarea id="user-input"
+                placeholder="Ask your question here (e.g. 'find COPD studies', 'who is studying cocaine addiction?', etc.)"
+                rows="1" autofocus></textarea>
 
             <!-- Column 1: Send Button -->
             <div class="send-btn-container">
@@ -165,20 +220,202 @@
         </div>
     </div>
     <div class="contact-us">
-        <p>For questions or feedback, please visit <a href="http://link-to-google-form">[link to google form]</a>. For more information about the BioData Catalyst, please visit <a href="https://biodatacatalyst.nhlbi.nih.gov/">https://biodatacatalyst.nhlbi.nih.gov/</a>.
+        <p>For questions or feedback, please visit <a href="http://link-to-google-form">[link to google form]</a>. For
+            more information about the BioData Catalyst, please visit <a
+                href="https://biodatacatalyst.nhlbi.nih.gov/">https://biodatacatalyst.nhlbi.nih.gov/</a>.
         </p>
     </div>
     <div class="disclaimer-container">
         <p>Disclaimer:</p>
-        <p><ul>
-            <li>The chatbot logs will be de-identified and preserved by the BioData Catalyst Study Chatbot Team for quality assurance purposes, though not shared with the public.</li>
-            <li>The chatbot is designed to answer queries about study abstracts and find studies that might be relevant to the user. Any queries outside of that core scope might result in inaccurate, erroneous, or fabricated responses due to design principles of the underlying LLM. Please exercise caution when executing such queries.</li>
-            <li>The chatbot does not have full implementation of content moderation guardrails, and therefore conversations outside of the abovementioned scope may result in uncouth or inappropriate responses.</li>
+        <p>
+        <ul>
+            <li>The chatbot logs will be de-identified and preserved by the BioData Catalyst Study Chatbot Team for
+                quality assurance purposes, though not shared with the public.</li>
+            <li>The chatbot is designed to answer queries about study abstracts and find studies that might be relevant
+                to the user. Any queries outside of that core scope might result in inaccurate, erroneous, or fabricated
+                responses due to design principles of the underlying LLM. Please exercise caution when executing such
+                queries.</li>
+            <li>The chatbot does not have full implementation of content moderation guardrails, and therefore
+                conversations outside of the abovementioned scope may result in uncouth or inappropriate responses.</li>
+            </p>
+        </ul>
         </p>
-        </ul></p>
     </div>
 
     <script>
+        function renderGraph(data, containerId) {
+            // Clear any existing graph content
+            d3.select(`#${containerId}`).select("svg").remove();
+
+            const container = document.getElementById(containerId);
+            const width = container.offsetWidth || 800;
+            const height = 500;
+
+            // Create the SVG container
+            const svg = d3.select(`#${containerId}`).append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const g = svg.append("g"); // Group for all graph elements
+
+            // Define arrowhead marker
+            g.append("defs").append("marker")
+                .attr("id", "arrowhead")
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 15)
+                .attr("refY", 0)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5")
+                .attr("fill", "#999");
+
+            // Add links (edges)
+            const link = g.selectAll(".link")
+                .data(data.edges)
+                .enter().append("line")
+                .attr("class", "link")
+                .attr("marker-end", "url(#arrowhead)")
+                .style("stroke", "#999")
+                .style("stroke-width", 1.5);
+
+            // Add edge labels
+            const edgeLabels = g.selectAll(".edge-label")
+                .data(data.edges)
+                .enter().append("text")
+                .attr("class", "edge-label")
+                .attr("font-size", "10px")
+                .attr("fill", "#333")
+                .attr("text-anchor", "middle")
+                .text(d => d.predicate_label);
+
+            // Add nodes
+            const node = g.selectAll(".node")
+                .data(data.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            node.append("circle")
+                .attr("r", 8)
+                .style("fill", "#69b3a2");
+
+            node.append("text")
+                .attr("dx", 12)
+                .attr("dy", ".35em")
+                .text(d => d.name);
+
+            // Tooltip for nodes
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("visibility", "hidden")
+                .style("background", "rgba(0, 0, 0, 0.8)")
+                .style("color", "#fff")
+                .style("padding", "5px 10px")
+                .style("border-radius", "5px")
+                .style("font-size", "12px");
+
+            node.on("mouseover", function (event, d) {
+                tooltip.style("visibility", "visible")
+                    .html(`<strong>Name:</strong> ${d.name}<br>
+                            <strong>Category:</strong> ${d.category}<br>
+                            <strong>Description:</strong> ${d.description || "N/A"}`);
+                    })
+                .on("mousemove", function (event) {
+                    tooltip.style("top", (event.pageY + 10) + "px")
+                        .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                    tooltip.style("visibility", "hidden");
+                });
+
+
+            // Force simulation
+            const simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.edges).id(d => d.id).distance(100))
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .on("tick", ticked);
+
+            // color code studyvar vs study vs ...
+            function ticked() {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                edgeLabels
+                    .attr("x", d => (d.source.x + d.target.x) / 2)
+                    .attr("y", d => (d.source.y + d.target.y) / 2)
+                    .attr("transform", function (d) {
+                        const dx = d.target.x - d.source.x;
+                        const dy = d.target.y - d.source.y;
+                        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+                        // Ensure the text is always upright
+                        const flippedAngle = angle > 90 || angle < -90 ? angle + 180 : angle;
+
+                        return `rotate(${flippedAngle}, ${(d.source.x + d.target.x) / 2}, ${(d.source.y + d.target.y) / 2})`;
+                    });
+
+                node.attr("transform", d => `translate(${d.x},${d.y})`);
+            }
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            // Once the simulation stabilizes, adjust the viewBox to fit the graph
+            simulation.on("end", () => {
+                const bounds = g.node().getBBox();
+                const margin = 50; // Add some padding
+                const fullWidth = bounds.width + margin * 2;
+                const fullHeight = bounds.height + margin * 2;
+
+                // Calculate scale to fit the graph within the container
+                const scale = Math.min(width / fullWidth, height / fullHeight);
+
+                // Set the viewBox to include the graph with padding
+                svg.attr("viewBox", `${bounds.x - margin} ${bounds.y - margin} ${fullWidth} ${fullHeight}`);
+                svg.attr("preserveAspectRatio", "xMidYMid meet");
+
+                // Optionally apply a transformation to center and scale the graph
+                g.attr("transform", `translate(${(width - fullWidth * scale) / 2}, ${(height - fullHeight * scale) / 2}) scale(${scale})`);
+            });
+
+            const zoom = d3.zoom()
+                .scaleExtent([0.5, 3]) // Limit zoom levels (0.5x to 3x)
+                .on("zoom", (event) => {
+                    g.attr("transform", event.transform); // Apply zoom and pan transformations
+                });
+
+            svg.call(zoom)
+                .on("dblclick.zoom", null) // Disable double-click to zoom
+                .transition()
+                .duration(750); // Smooth out zoom/pan responsiveness
+
+        }
+
+
         $(document).ready(function () {
             // Auto-expand textarea as the user types
             $('#user-input').on('input', function () {
@@ -189,18 +426,50 @@
             function sendMessage(message) {
                 $('#chat-box').append('<div class="chat-message user-message">' + message + '</div>');
                 $('#user-input').val('');
-                $('#user-input').css('height', 'auto');  // Reset height after sending the message
+                $('#user-input').css('height', 'auto'); // Reset height after sending the message
 
-                var spinner = '<div class="chat-message bot-message spinner"><i class="fas fa-circle-notch fa-spin"></i></div>';
+                const spinner = '<div class="chat-message bot-message spinner"><i class="fas fa-circle-notch fa-spin"></i></div>';
                 $('#chat-box').append(spinner);
                 scrollToBottom();
 
                 $.post("{{ url_for('get_response') }}", { message: message }, function (data) {
                     $('#chat-box .spinner').remove();
-                    $('#chat-box').append('<div class="chat-message bot-message">' + data.response + '</div>');
+
+                    // Create a container for the bot message and graph
+                    const responseContainer = `
+                        <div class="chat-response-container">
+                            <div class="response-container">${data.response}</div>
+                        </div>
+                    `;
+                    $('#chat-box').append(responseContainer);
+
+                    // If a knowledge graph is present, append it to the response container
+                    if (data.knowledge_graph) {
+                        const graphContainerId = `graph-container-${Date.now()}`;
+                        const graphContainer = `<div id="${graphContainerId}" class="graph-container"></div>`;
+                        $('.chat-response-container:last').append(graphContainer); // Append to the last response container
+
+                        const graphData = {
+                            nodes: data.knowledge_graph.nodes.map(node => ({
+                                id: node.id,
+                                name: node.name,
+                                category: node.category
+                            })),
+                            edges: data.knowledge_graph.edges.map(edge => ({
+                                source: edge.subject,
+                                target: edge.object,
+                                predicate: edge.predicate,
+                                predicate_label: edge.predicate_label
+                            }))
+                        };
+
+                        renderGraph(graphData, graphContainerId);
+                    }
+
                     scrollToBottom();
                 });
             }
+
 
             function scrollToBottom() {
                 var chatBox = $('#chat-box');
