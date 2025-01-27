@@ -444,7 +444,8 @@
                     $('#chat-box').append(responseContainer);
 
                     // If a knowledge graph is present, append it to the response container
-                    if (data.knowledge_graph) {
+                    if (('knowledge_graph' in data) && ('nodes' in data.knowledge_graph)
+                        && ('edges' in data.knowledge_graph)) {
                         const graphContainerId = `graph-container-${Date.now()}`;
                         const graphContainer = `<div id="${graphContainerId}" class="graph-container"></div>`;
                         $('.chat-response-container:last').append(graphContainer); // Append to the last response container
