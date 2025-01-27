@@ -64,63 +64,40 @@ def format_response(text):
     return text.replace('\n', '<br>')
 
 
-
 @app.route('/get_response', methods=['POST'])
 def get_response():
     user_message = request.form['message']
     api_url = os.getenv('API_URL')
-    headers = {
-        'accept': 'application/json',
-        'Content-Type': 'application/json'
-    }
-    # payload = {
-    #     "input": {
-    #         "input": user_message,
-    #         "chat_history": []
-    #     },
-    #     "config": {},
-    #     "kwargs": {}
-    # }
+    api_url_kg = os.getenv('API_URL_KG')
+    headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
 
-    # Attach the session_id to the payload
     session_id = session.get('session_id', 'unknown')
     payload['input']['input'] = user_message
-    payload['session_id'] = session_id  # Add session_id to payload
-
-    print(payload)
-
-    unique_url = f"{api_url}"
-    # unique_url = f"{api_url}?_={int(time.time())}"
-
-    logging.debug(f"Payload being sent to API: {payload}")
+    payload['session_id'] = session_id
 
     try:
-        response = requests.post(unique_url, json=payload, headers=headers)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-
-        logging.debug(f"Response received: {response.text}")
-
-        # Check if the response content is JSON
-        if response.headers.get('Content-Type') == 'application/json':
-            response_json = response.json()
-            bot_response = response_json.get('output', 'Sorry, I did not understand that.')
-        else:
-            print(f"Unexpected content type: {response.headers.get('Content-Type')}")
-            logging.error(f"Unexpected content type: {response.headers.get('Content-Type')}")
-            bot_response = 'Sorry, the response from the server was not in JSON format.'
-
-        bot_response = add_hyperlink(bot_response)
-        bot_response = format_response(bot_response)  # Format response to replace newlines with <br>
-        payload['input']['chat_history'].append([user_message, bot_response])
+        # KG endpoint
+        print("*" * 20)
+        print("*** KG response ***")
+        print("*" * 20)
+        print(api_url_kg)
         print(payload)
-    except requests.exceptions.HTTPError as http_err:
-        logging.error(f"HTTP error occurred: {http_err}")
-        bot_response = 'Sorry, there was an error processing your request.'
-    except Exception as err:
-        logging.error(f"Other error occurred: {err}")
-        bot_response = 'Sorry, there was an error processing your request.'
+        
+        response_kg_raw = requests.post(api_url_kg, json=payload, headers=headers)
+        response_json_kg = response_kg_raw.json()
+        print(json.dumps(response_json_kg, indent=2))
 
-    return jsonify({'response': bot_response})
+        # Extract kg endpoint output
+        response_kg = response_json_kg.get('output', {}).get('extra', {}).get('knowledge_graph', {})
+        response_output = response_json_kg.get('output', {}).get('output', {})
+
+        return jsonify({
+            'response': response_output,
+            'knowledge_graph': response_kg
+        })
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request failed: {e}")
+        return jsonify({'response': 'An error occurred while processing your request.'})
 
 @app.route('/export_chat_history')
 def export_chat_history():

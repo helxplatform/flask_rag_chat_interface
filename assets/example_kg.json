@@ -1,0 +1,409 @@
+{
+    "output": {
+        "output": "There is not enough information to answer the question.",
+        "extra": {
+            "knowledge_graph": {
+                "nodes": [
+                    {
+                        "category": [
+                            "biolink:Procedure",
+                            "biolink:Occurrent",
+                            "biolink:ActivityAndBehavior",
+                            "biolink:NamedThing",
+                            "biolink:PhysicalEssenceOrOccurrent"
+                        ],
+                        "name": "Transplantation",
+                        "equivalent_identifiers": [
+                            "UMLS:C0040732"
+                        ],
+                        "id": "UMLS:C0040732"
+                    },
+                    {
+                        "name": "TRORGNS",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "received organ transplant",
+                        "id": "phv00169078.v8.p2"
+                    },
+                    {
+                        "category": [
+                            "biolink:Study"
+                        ],
+                        "name": "phs000424.v8.p2",
+                        "id": "phs000424.v8.p2"
+                    },
+                    {
+                        "name": "MHTTCMT",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "tissue transplant comments",
+                        "id": "phv00169217.v8.p2"
+                    },
+                    {
+                        "name": "kdnyf5",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "kidney failure requiring dialysis or transplantation",
+                        "id": "phv00175307.v1.p3"
+                    },
+                    {
+                        "category": [
+                            "biolink:Study"
+                        ],
+                        "name": "phs000209.v13.p3",
+                        "id": "phs000209.v13.p3"
+                    },
+                    {
+                        "name": "kdnyf5",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "kidney failure requiring dialysis or transplantation",
+                        "id": "phv00176730.v1.p3"
+                    },
+                    {
+                        "name": "KIDNEY",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "have you ever received a kidney transplant?",
+                        "id": "phv00277323.v1.p1"
+                    },
+                    {
+                        "category": [
+                            "biolink:Study"
+                        ],
+                        "name": "phs001238.v2.p1",
+                        "id": "phs001238.v2.p1"
+                    },
+                    {
+                        "name": "KIDNEYYR",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "in what year or how old were you when you received a kidney transplant? year",
+                        "id": "phv00277324.v1.p1"
+                    },
+                    {
+                        "name": "KIDNEYAGE",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "in what year or how old were you when you received a kidney transplant? age",
+                        "id": "phv00277325.v1.p1"
+                    },
+                    {
+                        "name": "KIDNEY",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "have you ever received a kidney transplant?",
+                        "id": "phv00307783.v1.p1"
+                    },
+                    {
+                        "name": "KIDNEYYR",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "in what year or how old were you when you received a kidney transplant? year",
+                        "id": "phv00307784.v1.p1"
+                    },
+                    {
+                        "name": "KIDNEYAGE",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "in what year or how old were you when you received a kidney transplant? age",
+                        "id": "phv00307785.v1.p1"
+                    },
+                    {
+                        "name": "PHE_587",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "kidney replaced by transplant",
+                        "id": "phv00396632.v2.p2"
+                    },
+                    {
+                        "category": [
+                            "biolink:Study"
+                        ],
+                        "name": "phs001616.v2.p2",
+                        "id": "phs001616.v2.p2"
+                    },
+                    {
+                        "name": "Sickle cell SC disease",
+                        "category": [
+                            "biolink:Disease"
+                        ],
+                        "id": "UMLS:C0853729"
+                    },
+                    {
+                        "name": "DAGESICK",
+                        "category": [
+                            "biolink:StudyVariable"
+                        ],
+                        "description": "77 age dad diagnosed -  sickle cell disease",
+                        "id": "phv00123321.v1.p1"
+                    },
+                    {
+                        "category": [
+                            "biolink:Study"
+                        ],
+                        "name": "phs000284.v2.p1",
+                        "id": "phs000284.v2.p1"
+                    }
+                ],
+                "edges": [
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00169078.v8.p2",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "168590f6b9c217e2"
+                    },
+                    {
+                        "subject": "phv00169078.v8.p2",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs000424.v8.p2",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "c0dede3f01fc7312"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00169217.v8.p2",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "9a0617154adbf34f"
+                    },
+                    {
+                        "subject": "phv00169217.v8.p2",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs000424.v8.p2",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "58cad1c9f8318625"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00175307.v1.p3",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "42b11da742cb4da4"
+                    },
+                    {
+                        "subject": "phv00175307.v1.p3",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs000209.v13.p3",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "a67e8d46d1a57934"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00176730.v1.p3",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "83188984df7922cf"
+                    },
+                    {
+                        "subject": "phv00176730.v1.p3",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs000209.v13.p3",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "fbd5310278ad0a59"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00277323.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "05261a1ecebd6b1b"
+                    },
+                    {
+                        "subject": "phv00277323.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001238.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "f7c1e7f5c9a072b5"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00277324.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "285fb8f3a97bd51f"
+                    },
+                    {
+                        "subject": "phv00277324.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001238.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "b21b2be5afedd431"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00277325.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "f44287de53ed433a"
+                    },
+                    {
+                        "subject": "phv00277325.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001238.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "d67fa2108c573ad0"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00307783.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "df09aaa7f92c9565"
+                    },
+                    {
+                        "subject": "phv00307783.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001238.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "9cf867dae723180a"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00307784.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "e89ddf5c84d32992"
+                    },
+                    {
+                        "subject": "phv00307784.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001238.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "18211baf53bd55ab"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00307785.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "2939438a9bd92920"
+                    },
+                    {
+                        "subject": "phv00307785.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001238.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "9616bb5bc95a5965"
+                    },
+                    {
+                        "subject": "UMLS:C0040732",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00396632.v2.p2",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "2d07aa0e1c4c0497"
+                    },
+                    {
+                        "subject": "phv00396632.v2.p2",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs001616.v2.p2",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "b15a9530ddb05b63"
+                    },
+                    {
+                        "subject": "UMLS:C0853729",
+                        "predicate": "biolink:related_to",
+                        "predicate_label": "related to",
+                        "relation": "biolink:related_to",
+                        "relation_label": "related to",
+                        "object": "phv00123321.v1.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "8187bddbfc99a969"
+                    },
+                    {
+                        "subject": "phv00123321.v1.p1",
+                        "predicate": "biolink:part_of",
+                        "predicate_label": "part of",
+                        "relation": "BFO:0000050",
+                        "relation_label": "part of",
+                        "object": "phs000284.v2.p1",
+                        "provided_by": "renci.bdc.semanticsearch.annotator",
+                        "id": "79c1fd76235547d3"
+                    }
+                ]
+            }
+        }
+    },
+    "metadata": {
+        "run_id": "984b7d6d-3a4c-4305-ab17-3a4573c686f7",
+        "feedback_tokens": []
+    }
+}
